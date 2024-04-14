@@ -1,0 +1,29 @@
+<template>
+  <div class="tetris-block">
+    <!-- The block itself doesn't need anything inside it for now -->
+  </div>
+</template>
+
+<script lang="ts">
+import { defineComponent, PropType } from 'vue';
+
+export default defineComponent({
+  name: 'TetrisBlock',
+  props: {
+    color: {
+      type: String as PropType<string>,
+      required: true
+    },
+    // You might want to add other props like position if you need to position blocks individually
+  },
+});
+</script>
+
+<style scoped>
+.tetris-block {
+  width: 100%;
+  height: 100%;
+  background-color: var(--color, blue);
+  /* Use CSS variable for dynamic coloring */
+}
+</style>

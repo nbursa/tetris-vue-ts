@@ -1,0 +1,46 @@
+<template>
+  <div class="game-board">
+    <div v-for="(row, rowIndex) in rows" :key="'row-' + rowIndex" class="row">
+      <div v-for="(_, cellIndex) in row" :key="'cell-' + rowIndex + '-' + cellIndex"
+        :class="{ 'filled': isBlock(rowIndex, cellIndex) }" class="cell">
+      </div>
+    </div>
+  </div>
+</template>
+
+<script lang="ts">
+import { defineComponent, ref, onMounted, onUnmounted } from 'vue';
+
+export default defineComponent({
+  name: 'GameBoard',
+  setup() {
+    const rows = ref(Array.from({ length: 20 }, () => Array(10).fill(false)));
+    const blockPosition = ref({ x: 5, y: 0 });
+
+    const isBlock = (rowIndex: number, cellIndex: number): boolean => {
+      return rowIndex === blockPosition.value.y && cellIndex === blockPosition.value.x;
+    };
+
+    const moveBlock = () => {
+      if (blockPosition.value.y < rows.value.length - 1) {
+        blockPosition.value.y += 1; // Move block down
+      } else {
+        blockPosition.value.y = 0; // Reset block to top
+      }
+    };
+
+    let gameLoopId: number | undefined;
+    onMounted(() => {
+      gameLoopId = setInterval(moveBlock, 500); // Start the game loop
+    });
+    onUnmounted(() => {
+      if (gameLoopId) clearInterval(gameLoopId); // Clear the interval on unmount
+    });
+
+    return {
+      rows,
+      isBlock
+    };
+  },
+});
+</script>
